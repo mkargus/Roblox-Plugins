@@ -1,5 +1,5 @@
 --Made By Fasty48
-local Button = plugin:CreateToolbar('Fastcar48'):CreateButton('Terrain Color Editor','','rbxassetid://309029606')
+local Button = plugin:CreateToolbar('Fastcar48'):CreateButton('Terrain Color Editor','','rbxassetid://1282175967')
 
 local Color={
 	Black = Color3.fromRGB(33,33,33),
@@ -206,6 +206,10 @@ function SetMaterialColor()
 end
 
 function UISelect(number)
+	for _,v in ipairs(UIButtons) do
+		v.BackgroundColor3 = Color.Black
+	end
+	UIButtons[number].BackgroundColor3 = Color.White
 	Settings.MaterialSelected = number
 	CheckMaterialColor(Materials[number])
 end

@@ -10,4 +10,4 @@ Counts the amount of parts inside the Workspace.
 
 Allows users to change the color of any terrain material.
 
-~~Download on Roblox~~ **Not on Roblox yet.** | [Source Code](https://github.com/Fastcar48/Roblox-Plugins/blob/master/plugins/Terrain%20Color%20Editor.lua)
+[Download on Roblox](https://www.roblox.com/library/1304018463/Terrain-Color-Editor) | [Source Code](https://github.com/Fastcar48/Roblox-Plugins/blob/master/plugins/Terrain%20Color%20Editor.lua)
