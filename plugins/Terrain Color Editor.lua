@@ -160,15 +160,14 @@ function CheckMaterialColor(Material)
 	end
 
 	Settings.R = math.floor(GetColor.r*255)
-	Settings.G = math.floor(GetColor.g*255)
-	Settings.B = math.floor(GetColor.b*255)
-
 	RedValue.Text = Settings.R
 	RedSlider.CanvasPosition = Vector2.new(Settings.R,0)
 
+	Settings.G = math.floor(GetColor.g*255)
 	GreenValue.Text = Settings.G
 	GreenSlider.CanvasPosition = Vector2.new(Settings.G,0)
 
+	Settings.B = math.floor(GetColor.b*255)
 	BlueValue.Text = Settings.B
 	BlueSlider.CanvasPosition = Vector2.new(Settings.B,0)
 end
