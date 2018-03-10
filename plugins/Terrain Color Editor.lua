@@ -7,6 +7,31 @@ local Color={
 	White = Color3.new(1,1,1)
 }
 
+local DefaultColor={
+	['Asphalt'] = Color3.fromRGB(115,123,107),
+	['Basalt'] = Color3.fromRGB(30,30,37),
+	['Brick'] = Color3.fromRGB(138,86,62),
+	['Cobblestone'] = Color3.fromRGB(132,123,90),
+	['Concrete'] = Color3.fromRGB(127,102,63),
+	['CrackedLava'] = Color3.fromRGB(232,156,74),
+	['Glacier'] = Color3.fromRGB(101,176,234),
+	['Grass'] = Color3.fromRGB(106,127,63),
+	['Ground'] = Color3.fromRGB(102,92,59),
+	['Ice'] = Color3.fromRGB(129,194,224),
+	['LeafyGrass'] = Color3.fromRGB(115,132,74),
+	['Limestone'] = Color3.fromRGB(206,173,148),
+	['Mud'] = Color3.fromRGB(58,46,36),
+	['Pavement'] = Color3.fromRGB(148,148,140),
+	['Rock'] = Color3.fromRGB(102,108,111),
+	['Salt'] = Color3.fromRGB(198,189,181),
+	['Sand'] = Color3.fromRGB(143,126,95),
+	['Sandstone'] = Color3.fromRGB(137,90,71),
+	['Slate'] = Color3.fromRGB(63,127,107),
+	['Snow'] = Color3.fromRGB(195,199,218),
+	['Water'] = Color3.fromRGB(12,84,91),
+	['WoodPlanks'] = Color3.fromRGB(139,109,79)
+}
+
 local Settings={
 	PluginEnabled = false,
 	MaterialSelected = 1,
@@ -31,7 +56,7 @@ MainFrame.BackgroundColor3 = Color.Black
 MainFrame.BackgroundTransparency = .25
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0,5,0,5)
-MainFrame.Size = UDim2.new(0,160,0,145)
+MainFrame.Size = UDim2.new(0,160,0,165)
 MainFrame.Visible = false
 
 local header = Instance.new('Frame',MainFrame)
@@ -82,7 +107,7 @@ RedSlider.BorderSizePixel = 0
 RedSlider.Position = UDim2.new(0,0,0,20)
 RedSlider.Size = UDim2.new(0,150,0,10)
 RedSlider.BottomImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
-RedSlider.CanvasSize = UDim2.new(0,405,0,0)
+RedSlider.CanvasSize = UDim2.new(5,31,0,0)
 RedSlider.MidImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
 RedSlider.ScrollBarThickness = 10
 RedSlider.TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
@@ -125,6 +150,17 @@ BlueValue.Parent = BlueTitle
 local BlueSlider = RedSlider:Clone()
 BlueSlider.Parent = BlueTitle
 
+local DefaultBtn = Instance.new('TextButton',MainFrame)
+DefaultBtn.BackgroundColor3 = Color.Black
+DefaultBtn.BackgroundTransparency = .6
+DefaultBtn.BorderSizePixel = 0
+DefaultBtn.Position = UDim2.new(0,5,0,140)
+DefaultBtn.Size = UDim2.new(1,-10,0,20)
+DefaultBtn.Font = Enum.Font.SourceSans
+DefaultBtn.Text = 'Reset material to default'
+DefaultBtn.TextColor3 = Color.White
+DefaultBtn.TextSize = 14
+
 --Material Selector
 local SelectionFrame = Instance.new('ScrollingFrame',MainFrame)
 SelectionFrame.BackgroundColor3 = Color.Black
@@ -133,7 +169,7 @@ SelectionFrame.BorderSizePixel = 0
 SelectionFrame.Position = UDim2.new(1,10,0,0)
 SelectionFrame.Size = UDim2.new(0,150,0,175)
 SelectionFrame.BottomImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
-SelectionFrame.CanvasSize = UDim2.new(0,0,4.85,0)
+SelectionFrame.CanvasSize = UDim2.new(0,0,4,45)
 SelectionFrame.MidImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
 SelectionFrame.ScrollBarThickness = 5
 SelectionFrame.TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
@@ -194,6 +230,16 @@ function CreateBtn(Name,Material)
 	return Btn
 end
 
+function SetBackToDefault()
+	local Material = Enum.Material[Materials[Settings.MaterialSelected]]
+	if Material == Enum.Material.Water then
+		workspace.Terrain.WaterColor = DefaultColor['Water']
+	else
+		workspace.Terrain:SetMaterialColor(Material,DefaultColor[Materials[Settings.MaterialSelected]])
+	end
+	CheckMaterialColor(Materials[Settings.MaterialSelected])
+end
+
 function SetMaterialColor()
 	local Material = Enum.Material[Materials[Settings.MaterialSelected]]
 	local Color = Color3.fromRGB(Settings.R,Settings.G,Settings.B)
@@ -238,6 +284,13 @@ CreateBtn('Slate')
 CreateBtn('Snow')
 CreateBtn('Water')
 CreateBtn('Wooden Planks','WoodPlanks')
+
+--------------------
+--Button events
+--------------------
+DefaultBtn.MouseButton1Click:connect(function()
+	SetBackToDefault()
+end)
 
 --------------------
 --Textbox events
