@@ -35,7 +35,6 @@ local DefaultColor={
 local Settings={
 	PluginEnabled = false,
 	MaterialSelected = 1,
-
 	R = 0,
 	G = 0,
 	B = 0
@@ -53,7 +52,7 @@ local UI = Instance.new('ScreenGui',game.CoreGui)
 local MainFrame = Instance.new('Frame',UI)
 MainFrame.Active = true
 MainFrame.BackgroundColor3 = Color.Black
-MainFrame.BackgroundTransparency = .25
+MainFrame.BackgroundTransparency = .5
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0,5,0,5)
 MainFrame.Size = UDim2.new(0,160,0,165)
@@ -66,19 +65,19 @@ header.Size = UDim2.new(1,0,0,5)
 
 local Title = Instance.new('TextLabel',MainFrame)
 Title.BackgroundColor3 = Color.Black
-Title.BackgroundTransparency = .6
+Title.BackgroundTransparency = .5
 Title.BorderSizePixel = 0
 Title.Position = UDim2.new(0,5,0,10)
 Title.Size = UDim2.new(1,-10,0,20)
 Title.Font = Enum.Font.SourceSansBold
 Title.Text = 'Terrain Color Editor'
 Title.TextColor3 = Color.White
-Title.TextSize = 15
+Title.TextSize = 14
 
 --Red
 local RedTitle = Instance.new('TextLabel',MainFrame)
 RedTitle.BackgroundColor3 = Color.Black
-RedTitle.BackgroundTransparency = .6
+RedTitle.BackgroundTransparency = .5
 RedTitle.BorderSizePixel = 0
 RedTitle.Position = UDim2.new(0,5,0,35)
 RedTitle.Size = UDim2.new(.5,-5,0,20)
@@ -90,7 +89,7 @@ RedTitle.TextXAlignment = Enum.TextXAlignment.Left
 
 local RedValue = Instance.new("TextBox",RedTitle)
 RedValue.BackgroundColor3 = Color.Black
-RedValue.BackgroundTransparency = .6
+RedValue.BackgroundTransparency = .5
 RedValue.BorderSizePixel = 0
 RedValue.Position = UDim2.new(1,0,0,0)
 RedValue.Size = UDim2.new(1,0,0,20)
@@ -102,12 +101,12 @@ RedValue.TextXAlignment = Enum.TextXAlignment.Right
 
 local RedSlider = Instance.new('ScrollingFrame',RedTitle)
 RedSlider.BackgroundColor3 = Color.Black
-RedSlider.BackgroundTransparency = .2
+RedSlider.BackgroundTransparency = .5
 RedSlider.BorderSizePixel = 0
 RedSlider.Position = UDim2.new(0,0,0,20)
 RedSlider.Size = UDim2.new(0,150,0,10)
 RedSlider.BottomImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
-RedSlider.CanvasSize = UDim2.new(5,31,0,0)
+RedSlider.CanvasSize = UDim2.new(5,30,0,0)
 RedSlider.MidImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
 RedSlider.ScrollBarThickness = 10
 RedSlider.TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
@@ -115,7 +114,7 @@ RedSlider.TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
 --Green
 local GreenTitle = Instance.new('TextLabel',MainFrame)
 GreenTitle.BackgroundColor3 = Color.Black
-GreenTitle.BackgroundTransparency = .6
+GreenTitle.BackgroundTransparency = .5
 GreenTitle.BorderSizePixel = 0
 GreenTitle.Position = UDim2.new(0,5,0,70)
 GreenTitle.Size = UDim2.new(.5,-5,0,20)
@@ -134,7 +133,7 @@ GreenSlider.Parent = GreenTitle
 --Blue
 local BlueTitle = Instance.new('TextLabel',MainFrame)
 BlueTitle.BackgroundColor3 = Color.Black
-BlueTitle.BackgroundTransparency = .6
+BlueTitle.BackgroundTransparency = .5
 BlueTitle.BorderSizePixel = 0
 BlueTitle.Position = UDim2.new(0,5,0,105)
 BlueTitle.Size = UDim2.new(.5,-5,0,20)
@@ -152,7 +151,7 @@ BlueSlider.Parent = BlueTitle
 
 local DefaultBtn = Instance.new('TextButton',MainFrame)
 DefaultBtn.BackgroundColor3 = Color.Black
-DefaultBtn.BackgroundTransparency = .6
+DefaultBtn.BackgroundTransparency = .5
 DefaultBtn.BorderSizePixel = 0
 DefaultBtn.Position = UDim2.new(0,5,0,140)
 DefaultBtn.Size = UDim2.new(1,-10,0,20)
@@ -164,7 +163,7 @@ DefaultBtn.TextSize = 14
 --Material Selector
 local SelectionFrame = Instance.new('ScrollingFrame',MainFrame)
 SelectionFrame.BackgroundColor3 = Color.Black
-SelectionFrame.BackgroundTransparency = .25
+SelectionFrame.BackgroundTransparency = .5
 SelectionFrame.BorderSizePixel = 0
 SelectionFrame.Position = UDim2.new(1,10,0,0)
 SelectionFrame.Size = UDim2.new(0,150,0,175)
@@ -176,6 +175,11 @@ SelectionFrame.TopImage = 'rbxasset://textures/ui/Scroll/scroll-middle.png'
 
 local ListLayout = Instance.new('UIListLayout',SelectionFrame)
 ListLayout.Padding = UDim.new(0,2)
+
+local Selected = Instance.new('Frame')
+Selected.BackgroundColor3 = Color.Orange
+Selected.BorderSizePixel = 0
+Selected.Size = UDim2.new(0,5,1,0)
 
 --------------------
 --Functions
@@ -211,7 +215,7 @@ end
 function CreateBtn(Name,Material)
 	local Btn = Instance.new('TextButton',SelectionFrame)
 	Btn.BackgroundColor3 = Color.Black
-	Btn.BackgroundTransparency = .6
+	Btn.BackgroundTransparency = .5
 	Btn.BorderSizePixel = 0
 	Btn.Name = Name
 	Btn.Size = UDim2.new(1,-5,0,30)
@@ -225,8 +229,12 @@ function CreateBtn(Name,Material)
 	Btn.Font = Enum.Font.SourceSans
 	Btn.Text = Name
 	Btn.TextColor3 = Color.White
-	Btn.TextSize = 20
-	Btn.MouseButton1Click:connect(function() UISelect(Btn.LayoutOrder) end)
+	Btn.TextSize = 18
+	Btn.MouseButton1Click:connect(function()
+		Selected.Parent = UIButtons[Btn.LayoutOrder]
+		Settings.MaterialSelected = Btn.LayoutOrder
+		CheckMaterialColor(Materials[Btn.LayoutOrder])
+	end)
 	return Btn
 end
 
@@ -248,15 +256,6 @@ function SetMaterialColor()
 	else
 		workspace.Terrain:SetMaterialColor(Material,Color)
 	end
-end
-
-function UISelect(number)
-	for _,v in ipairs(UIButtons) do
-		v.BackgroundColor3 = Color.Black
-	end
-	UIButtons[number].BackgroundColor3 = Color.White
-	Settings.MaterialSelected = number
-	CheckMaterialColor(Materials[number])
 end
 
 --------------------
@@ -350,11 +349,7 @@ end)
 --Plugin Events
 --------------------
 Button.Click:connect(function()
-	if Settings.PluginEnabled then
-		Activate(false)
-	else
-		Activate(true)
-	end
+	Activate(not Settings.PluginEnabled)
 end)
 
 plugin.Deactivation:connect(function()
