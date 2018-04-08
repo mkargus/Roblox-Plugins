@@ -7,41 +7,40 @@ local Color={
 	White = Color3.new(1,1,1)
 }
 
-local DefaultColor={
-	['Asphalt'] = Color3.fromRGB(115,123,107),
-	['Basalt'] = Color3.fromRGB(30,30,37),
-	['Brick'] = Color3.fromRGB(138,86,62),
-	['Cobblestone'] = Color3.fromRGB(132,123,90),
-	['Concrete'] = Color3.fromRGB(127,102,63),
-	['CrackedLava'] = Color3.fromRGB(232,156,74),
-	['Glacier'] = Color3.fromRGB(101,176,234),
-	['Grass'] = Color3.fromRGB(106,127,63),
-	['Ground'] = Color3.fromRGB(102,92,59),
-	['Ice'] = Color3.fromRGB(129,194,224),
-	['LeafyGrass'] = Color3.fromRGB(115,132,74),
-	['Limestone'] = Color3.fromRGB(206,173,148),
-	['Mud'] = Color3.fromRGB(58,46,36),
-	['Pavement'] = Color3.fromRGB(148,148,140),
-	['Rock'] = Color3.fromRGB(102,108,111),
-	['Salt'] = Color3.fromRGB(198,189,181),
-	['Sand'] = Color3.fromRGB(143,126,95),
-	['Sandstone'] = Color3.fromRGB(137,90,71),
-	['Slate'] = Color3.fromRGB(63,127,107),
-	['Snow'] = Color3.fromRGB(195,199,218),
-	['Water'] = Color3.fromRGB(12,84,91),
-	['WoodPlanks'] = Color3.fromRGB(139,109,79)
+local MaterialList={
+	{Name='Asphalt',Enum='Asphalt',Default=Color3.fromRGB(115,123,107)},
+	{Name='Basalt',Enum='Basalt',Default=Color3.fromRGB(30,30,37)},
+	{Name='Brick',Enum='Brick',Default=Color3.fromRGB(138,86,62)},
+	{Name='Cobblestone',Enum='Cobblestone',Default=Color3.fromRGB(132,123,90)},
+	{Name='Concrete',Enum='Concrete',Default=Color3.fromRGB(127,102,63)},
+	{Name='Cracked Lava',Enum='CrackedLava',Default=Color3.fromRGB(232,156,74)},
+	{Name='Glacier',Enum='Glacier',Default=Color3.fromRGB(101,176,234)},
+	{Name='Grass',Enum='Grass',Default=Color3.fromRGB(106,127,63)},
+	{Name='Ground',Enum='Ground',Default=Color3.fromRGB(102,92,59)},
+	{Name='Ice',Enum='Ice',Default=Color3.fromRGB(129,194,224)},
+	{Name='Leafy Grass',Enum='LeafyGrass',Default=Color3.fromRGB(115,132,74)},
+	{Name='Limestone',Enum='Limestone',Default=Color3.fromRGB(206,173,148)},
+	{Name='Mud',Enum='Mud',Default=Color3.fromRGB(58,46,36)},
+	{Name='Pavement',Enum='Pavement',Default=Color3.fromRGB(148,148,140)},
+	{Name='Rock',Enum='Rock',Default=Color3.fromRGB(102,108,111),},
+	{Name='Salt',Enum='Salt',Default=Color3.fromRGB(198,189,181)},
+	{Name='Sand',Enum='Sand',Default=Color3.fromRGB(143,126,95)},
+	{Name='Sandstone',Enum='Sandstone',Default=Color3.fromRGB(137,90,71)},
+	{Name='Slate',Enum='Slate',Default=Color3.fromRGB(63,127,107)},
+	{Name='Snow',Enum='Snow',Default=Color3.fromRGB(195,199,218)},
+	{Name='Water',Enum='Water',Default=Color3.fromRGB(12,84,91)},
+	{Name='Wooden Planks',Enum='WoodPlanks',Default=Color3.fromRGB(139,109,79)}
 }
 
 local Settings={
-	PluginEnabled = false,
 	MaterialSelected = 1,
+	PluginEnabled = false,
 	R = 0,
 	G = 0,
 	B = 0
 }
 
 local UIButtons={}
-local Materials={}
 
 --------------------
 --UI
@@ -212,7 +211,7 @@ function CheckMaterialColor(Material)
 	BlueSlider.CanvasPosition = Vector2.new(Settings.B,0)
 end
 
-function CreateBtn(Name,Material)
+function CreateBtn(Name)
 	local Btn = Instance.new('TextButton',SelectionFrame)
 	Btn.BackgroundColor3 = Color.Black
 	Btn.BackgroundTransparency = .5
@@ -220,11 +219,6 @@ function CreateBtn(Name,Material)
 	Btn.Name = Name
 	Btn.Size = UDim2.new(1,-5,0,30)
 	table.insert(UIButtons,Btn)
-	if not Material then
-		table.insert(Materials,Name)
-	else
-		table.insert(Materials,Material)
-	end
 	Btn.LayoutOrder = #UIButtons
 	Btn.Font = Enum.Font.SourceSans
 	Btn.Text = Name
@@ -233,23 +227,23 @@ function CreateBtn(Name,Material)
 	Btn.MouseButton1Click:connect(function()
 		Selected.Parent = UIButtons[Btn.LayoutOrder]
 		Settings.MaterialSelected = Btn.LayoutOrder
-		CheckMaterialColor(Materials[Btn.LayoutOrder])
+		CheckMaterialColor(MaterialList[Settings.MaterialSelected].Enum)
 	end)
 	return Btn
 end
 
 function SetBackToDefault()
-	local Material = Enum.Material[Materials[Settings.MaterialSelected]]
+	local Material = Enum.Material[MaterialList[Settings.MaterialSelected].Enum]
 	if Material == Enum.Material.Water then
-		workspace.Terrain.WaterColor = DefaultColor['Water']
+		workspace.Terrain.WaterColor = Color3.fromRGB(12,84,91)
 	else
-		workspace.Terrain:SetMaterialColor(Material,DefaultColor[Materials[Settings.MaterialSelected]])
+		workspace.Terrain:SetMaterialColor(Material,MaterialList[Settings.MaterialSelected].Default)
 	end
-	CheckMaterialColor(Materials[Settings.MaterialSelected])
+	CheckMaterialColor(MaterialList[Settings.MaterialSelected].Enum)
 end
 
 function SetMaterialColor()
-	local Material = Enum.Material[Materials[Settings.MaterialSelected]]
+	local Material = Enum.Material[MaterialList[Settings.MaterialSelected].Enum]
 	local Color = Color3.fromRGB(Settings.R,Settings.G,Settings.B)
 	if Material == Enum.Material.Water then
 		workspace.Terrain.WaterColor = Color
@@ -261,28 +255,9 @@ end
 --------------------
 --Material List
 --------------------
-CreateBtn('Asphalt')
-CreateBtn('Basalt','Basalt')
-CreateBtn('Brick','Brick')
-CreateBtn('Cobblestone')
-CreateBtn('Concrete')
-CreateBtn('Cracked Lava','CrackedLava')
-CreateBtn('Glacier')
-CreateBtn('Grass')
-CreateBtn('Ground')
-CreateBtn('Ice')
-CreateBtn('Leafy Grass','LeafyGrass')
-CreateBtn('Limestone')
-CreateBtn('Mud')
-CreateBtn('Pavement')
-CreateBtn('Rock')
-CreateBtn('Salt')
-CreateBtn('Sand')
-CreateBtn('Sandstone')
-CreateBtn('Slate')
-CreateBtn('Snow')
-CreateBtn('Water')
-CreateBtn('Wooden Planks','WoodPlanks')
+for _, Material in pairs(MaterialList) do
+	CreateBtn(Material.Name)
+end
 
 --------------------
 --Button events
