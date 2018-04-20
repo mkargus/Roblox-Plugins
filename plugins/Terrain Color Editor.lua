@@ -45,7 +45,10 @@ local UIButtons={}
 --------------------
 --UI
 --------------------
-local UI = Instance.new('ScreenGui',game.CoreGui)
+local WidgetInfo = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float,false,true,50,50,350,200)
+
+local UI = plugin:CreateDockWidgetPluginGui('TCE',WidgetInfo)
+UI.Title = 'Terrain Color Editor'
 
 --Color
 local MainFrame = Instance.new('Frame',UI)
@@ -55,7 +58,6 @@ MainFrame.BackgroundTransparency = .5
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0,5,0,5)
 MainFrame.Size = UDim2.new(0,160,0,165)
-MainFrame.Visible = false
 
 local header = Instance.new('Frame',MainFrame)
 header.BackgroundColor3 = Color.Orange
@@ -186,7 +188,7 @@ Selected.Size = UDim2.new(0,5,1,0)
 function Activate(bool)
 	Settings.PluginEnabled = bool
 	Button:SetActive(bool)
-	MainFrame.Visible = bool
+	UI.Enabled = bool
 end
 
 function CheckMaterialColor(Material)
@@ -328,7 +330,7 @@ Button.Click:connect(function()
 end)
 
 plugin.Deactivation:connect(function()
-	if Settings.PluginEnabled and MainFrame.Visible then
+	if Settings.PluginEnabled and UI.Enabled then
 		Activate(false)
 	end
 end)
