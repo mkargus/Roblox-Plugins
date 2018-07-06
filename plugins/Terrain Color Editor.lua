@@ -1,5 +1,5 @@
 --Made By Fasty48
-local Button = plugin:CreateToolbar('Fastcar48'):CreateButton('Terrain Color Editor','','rbxassetid://1282175967')
+local Button = plugin:CreateToolbar('Fasty48'):CreateButton('Terrain Color Editor','','rbxassetid://2041394144')
 
 local Color={
 	Black = Color3.fromRGB(33,33,33),
@@ -45,10 +45,8 @@ local UIButtons={}
 --------------------
 --UI
 --------------------
-local WidgetInfo = DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Float,false,true,50,50,350,200)
-
-local UI = plugin:CreateDockWidgetPluginGui('TCE',WidgetInfo)
-UI.Title = 'Terrain Color Editor'
+local UI = Instance.new('ScreenGui',game.CoreGui)
+UI.Enabled = false
 
 --Color
 local MainFrame = Instance.new('Frame',UI)
